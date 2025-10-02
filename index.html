@@ -9,10 +9,76 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/style.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        :root {
+            --cor-primaria-fieg: #003366;
+            --cor-secundaria-fieg: #009933;
+            --cor-texto: #333;
+            --cor-texto-claro: #f8f9fa;
+            --cor-fundo-claro: #f4f7f6;
+            --nav-height: 70px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
+        body { font-family: 'Montserrat', sans-serif; background-color: #fff; color: var(--cor-texto); line-height: 1.8; font-size: 16px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        .main-nav { position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height); background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; display: flex; align-items: center; }
+        .main-nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .main-nav .logo img { max-height: 40px; display: block; }
+        .main-nav ul { list-style: none; display: flex; gap: 25px; }
+        .main-nav a { text-decoration: none; color: var(--cor-primaria-fieg); font-weight: 600; font-size: 0.9rem; position: relative; padding: 5px 0; }
+        .main-nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--cor-secundaria-fieg); transition: width 0.3s ease; }
+        .main-nav a:hover::after { width: 100%; }
+
+        .hero { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 90vh; color: white; background: linear-gradient(rgba(0, 51, 102, 0.7), rgba(0, 51, 102, 0.5)), url('https://upload.wikimedia.org/wikipedia/commons/2/28/Cerrado_Brasileiro.jpg') no-repeat center center; background-size: cover; padding: 40px 20px; }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 40px; font-weight: 400; max-width: 800px; line-height: 1.6; }
+        .hero-btn { background-color: var(--cor-secundaria-fieg); color: white; border: none; padding: 15px 35px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .hero-btn:hover { background-color: #007a29; transform: translateY(-3px); }
+
+        .content-section { padding: 80px 0; }
+        .content-section:nth-of-type(odd) { background-color: var(--cor-fundo-claro); }
+        .content-section h2 { font-size: 2.5rem; color: var(--cor-primaria-fieg); text-align: center; margin-bottom: 20px; }
+        .content-section .section-subtitle { text-align: center; max-width: 700px; margin: 0 auto 60px auto; font-size: 1.1rem; color: #555; }
+        .content-section h3 { font-size: 1.5rem; color: var(--cor-secundaria-fieg); margin-top: 40px; margin-bottom: 20px; text-align: center;}
+        
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+        
+        .card { background-color: #fff; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+        .card-icon { width: 50px; height: 50px; margin-bottom: 20px; fill: var(--cor-secundaria-fieg); }
+        .card strong { display: block; color: var(--cor-primaria-fieg); font-size: 1.1rem; margin-bottom: 10px; }
+        .card p { flex-grow: 1; }
+        
+        .card-link { text-decoration: none; color: var(--cor-secundaria-fieg); font-weight: 700; padding: 8px 24px; border: 2px solid var(--cor-secundaria-fieg); margin-top: 20px; transition: all 0.3s ease; }
+        .card-link:hover { background-color: var(--cor-secundaria-fieg); color: white; }
+        
+        footer { background-color: var(--cor-primaria-fieg); color: var(--cor-texto-claro); padding: 40px 20px; text-align: center; font-size: 0.9rem; line-height: 1.6; }
+        footer a { color: #fff; text-decoration: none; font-weight: 600; }
+        footer .footer-block { display: flex; flex-direction: column; gap: 8px; }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 40px; border-top: 5px solid var(--cor-primaria-fieg); width: 90%; max-width: 800px; position: relative; animation: fadeIn 0.4s; }
+        .modal-content h3 { color: var(--cor-primaria-fieg); font-size: 2rem; margin-top: 0; margin-bottom: 25px; }
+        .modal-content .chart-container { margin: 30px auto; }
+        .chart-context { font-size: 0.9rem; color: #555; text-align: center; margin-top: 15px; font-style: italic; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .modal-content .sources { margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.9rem; color: #555; }
+        .modal-content .sources strong { color: var(--cor-texto); }
+        .modal-content .sources ul { list-style-position: inside; padding-left: 0; }
+        .close-modal-btn { color: #aaa; position: absolute; top: 15px; right: 25px; font-size: 32px; font-weight: bold; cursor: pointer; }
+        .close-modal-btn:hover, .close-modal-btn:focus { color: black; }
+        @keyframes fadeIn { from {opacity: 0; transform: translateY(-30px);} to {opacity: 1; transform: translateY(0);} }
+        
+        @media (max-width: 992px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .main-nav ul { display: none; } .hero h1 { font-size: 2.5rem; } .content-section h2 { font-size: 2rem; } .card-grid { grid-template-columns: 1fr; } }
+        @media print { /* Estilos de impressão podem ser adicionados aqui */ }
+    </style>
 </head>
 <body>
 
@@ -211,6 +277,78 @@
     <div id="modal-mercado" class="modal"><div class="modal-content"><span class="close-modal-btn">&times;</span><h3>Mercado Livre de Energia</h3><p>O Ambiente de Contratação Livre (ACL), ou Mercado Livre de Energia, permite que empresas com demanda contratada acima de 500 kW comprem energia diretamente de geradores ou comercializadores, negociando preço, prazo e volume. Isso proporciona uma previsibilidade de custos muito maior e uma economia que, em média, varia de 15% a 35% em comparação ao mercado regulado (cativo). Além disso, a empresa pode optar por comprar energia de fontes 100% renováveis, obtendo um certificado que comprova sua sustentabilidade.</p><div class="chart-container"><canvas id="chartMercado"></canvas><p class="chart-context">A migração para o Mercado Livre de Energia oferece uma redução de custo direta e significativa, além de maior previsibilidade orçamentária para a indústria.</p></div><div class="sources"><strong>Fontes:</strong> CCEE (Câmara de Comercialização de Energia Elétrica), ABRACEEL.</div></div></div>
     <div id="modal-geracao" class="modal"><div class="modal-content"><span class="close-modal-btn">&times;</span><h3>Geração Própria (Distribuída)</h3><p>Com a drástica redução nos custos dos painéis fotovoltaicos, a geração de energia solar no próprio telhado da fábrica se tornou um dos investimentos mais atrativos para a indústria. O payback médio de um sistema solar industrial no Brasil situa-se entre 4 e 6 anos. Após esse período, a energia gerada é praticamente gratuita por mais de 20 anos (vida útil dos painéis). Em Goiás, estado com um dos maiores índices de irradiação solar do país, as condições são ainda mais favoráveis. Além da economia, a geração própria protege a empresa contra a volatilidade das tarifas de energia.</p><div class="chart-container"><canvas id="chartGeracao"></canvas><p class="chart-context">O crescimento da energia solar reflete sua viabilidade econômica. Para a indústria, a geração própria significa autonomia e proteção contra aumentos na tarifa.</p></div><div class="sources"><strong>Fontes:</strong> ABSOLAR, ANEEL.</div></div></div>
 
-    <script src="js/main.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica dos modais
+            const modalTriggers = document.querySelectorAll('.modal-trigger');
+            const closeModalButtons = document.querySelectorAll('.close-modal-btn');
+            const openModal = (modalId) => {
+                const modal = document.getElementById(modalId);
+                if (modal) modal.style.display = 'block';
+            };
+            const closeModal = (modalId) => {
+                const modal = document.getElementById(modalId);
+                if (modal) modal.style.display = 'none';
+            };
+            
+            modalTriggers.forEach(trigger => {
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    openModal(trigger.dataset.modalTarget);
+                });
+            });
+
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal');
+                    if (modal) closeModal(modal.id);
+                });
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target.classList.contains('modal')) {
+                    closeModal(event.target.id);
+                }
+            });
+
+            // Lógica do PDF
+            const downloadBtn = document.getElementById('download-btn');
+            downloadBtn.addEventListener('click', () => {
+                const element = document.getElementById('content-to-pdf');
+                const opt = {
+                    margin:       [0.5, 0.5, 0.5, 0.5],
+                    filename:     'guia_sustentabilidade_fieg.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, logging: false },
+                    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+            });
+
+            // Definição de cores e criação dos gráficos
+            const fiegBlue = 'rgba(0, 51, 102, 0.8)';
+            const fiegGreen = 'rgba(0, 153, 51, 0.8)';
+            const fiegBlueBorder = 'rgb(0, 51, 102)';
+            const fiegGreenBorder = 'rgb(0, 153, 51)';
+
+            new Chart(document.getElementById('chartCustos').getContext('2d'), { type: 'bar', data: { labels: ['Energia', 'Água', 'Gestão de Resíduos'], datasets: [{ label: 'Potencial de Redução de Custos (%)', data: [30, 40, 60], backgroundColor: [fiegBlue, fiegGreen, fiegBlue] }] }, options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
+            new Chart(document.getElementById('chartClientes').getContext('2d'), { type: 'pie', data: { labels: ['ESG influencia a compra', 'Indiferente'], datasets: [{ data: [77, 23], backgroundColor: [fiegGreen, '#cccccc'] }] }, options: { responsive: true, plugins: { title: { display: true, text: 'Consumidores brasileiros que consideram ESG' } } } });
+            new Chart(document.getElementById('chartFinanciamento').getContext('2d'), { type: 'line', data: { labels: ['2022', '2023', '2024', '2025 (proj.)'], datasets: [{ label: 'Emissão de Títulos Verdes (em R$ bilhões)', data: [15, 25, 40, 55], fill: false, borderColor: fiegGreen, tension: 0.1 }] }, options: { responsive: true, plugins: { title: { display: true, text: 'Crescimento do Mercado de Crédito Verde no Brasil' } } } });
+            new Chart(document.getElementById('chartTalentos').getContext('2d'), { type: 'doughnut', data: { labels: ['Consideram o impacto da empresa', 'Não consideram'], datasets: [{ data: [82, 18], backgroundColor: [fiegBlue, '#cccccc'] }] }, options: { responsive: true, plugins: { title: { display: true, text: 'Geração Z e Millennials ao escolher um emprego' } } } });
+            new Chart(document.getElementById('chartRiscos').getContext('2d'), { type: 'radar', data: { labels: ['Regulatórios', 'Operacionais', 'Reputação', 'Financeiros', 'Mercado'], datasets: [{ label: 'Nível de Impacto da Inação ESG', data: [8, 9, 10, 7, 8], fill: true, backgroundColor: 'rgba(0, 51, 102, 0.2)', borderColor: fiegBlue, pointBackgroundColor: fiegBlue }] }, options: { scales: { r: { beginAtZero: true, max: 10 } } } });
+            new Chart(document.getElementById('chartLegislacao').getContext('2d'), { type: 'line', data: { labels: ['2022', '2023', '2024', '2025 (proj.)'], datasets: [{ label: 'Valor das Multas Ambientais Aplicadas (em R$ milhões)', data: [500, 650, 850, 1100], backgroundColor: fiegBlue, borderColor: fiegBlueBorder }] }, options: { plugins: { title: { display: true, text: 'Aumento na Aplicação de Multas Ambientais na Indústria' } } } });
+            new Chart(document.getElementById('chartSST').getContext('2d'), { type: 'bar', data: { labels: ['Custos Diretos (médicos, etc)', 'Custos Indiretos (produtividade, etc)'], datasets: [{ label: 'Custo Médio de um Acidente (em R$ mil)', data: [50, 200], backgroundColor: [fiegBlue, fiegGreen] }] }, options: { indexAxis: 'y', plugins: { legend: { display: false } } } });
+            new Chart(document.getElementById('chartCadeia').getContext('2d'), { type: 'pie', data: { labels: ['Excluíram fornecedores por falhas ESG', 'Não excluíram'], datasets: [{ data: [45, 55], backgroundColor: [fiegGreen, '#cccccc'] }] }, options: { plugins: { title: { display: true, text: 'Grandes Corporações Globais (2025)' } } } });
+            new Chart(document.getElementById('chartRelatorios').getContext('2d'), { type: 'doughnut', data: { labels: ['Relatam com padrão (GRI, etc)', 'Não relatam ou sem padrão'], datasets: [{ data: [35, 65], backgroundColor: [fiegBlue, '#cccccc'] }] }, options: { plugins: { title: { display: true, text: 'Adoção de Relatórios Padronizados (Empresas B3)' } } } });
+            new Chart(document.getElementById('chartDesign').getContext('2d'), { type: 'pie', data: { labels: ['Impacto definido na fase de Design', 'Impacto definido na Produção/Uso/Descarte'], datasets: [{ data: [80, 20], backgroundColor: [fiegGreen, '#cccccc'] }] }, options: { plugins: { title: { display: true, text: 'Origem do Impacto Ambiental de um Produto' } } } });
+            new Chart(document.getElementById('chartReaproveitamento').getContext('2d'), { type: 'bar', data: { labels: ['Plásticos', 'Metais', 'Papel/Papelão', 'Vidro'], datasets: [{ label: 'Potencial de Recuperação Econômica (R$ bilhões/ano)', data: [20, 35, 10, 5], backgroundColor: [fiegBlue, fiegGreen, fiegBlue, fiegGreen] }] }, options: { plugins: { legend: { display: false }, title: { display: true, text: 'Valor Oculto nos Resíduos Industriais do Brasil' } } } });
+            new Chart(document.getElementById('chartModelos').getContext('2d'), { type: 'line', data: { labels: ['Ano 1', 'Ano 2', 'Ano 3', 'Ano 4', 'Ano 5'], datasets: [{ label: 'Venda Única', data: [100, 0, 0, 0, 0], borderColor: '#cccccc' }, { label: 'Modelo de Serviço (Receita Acumulada)', data: [30, 60, 90, 120, 150], borderColor: fiegGreen, fill: true, backgroundColor: 'rgba(0, 153, 51, 0.1)' }] }, options: { plugins: { title: { display: true, text: 'Comparativo de Receita: Venda vs. Serviço' } } } });
+            new Chart(document.getElementById('chartLogistica').getContext('2d'), { type: 'bar', data: { labels: ['Latas de Alumínio', 'PET', 'Pneus', 'Eletrônicos'], datasets: [{ label: 'Taxa de Coleta e Reciclagem no Brasil (%)', data: [98, 55, 45, 3], backgroundColor: fiegBlue }] }, options: { plugins: { legend: { display: false }, title: { display: true, text: 'Índices de Logística Reversa' } } } });
+            new Chart(document.getElementById('chartMapeamento').getContext('2d'), { type: 'bar', data: { labels: ['Iluminação LED', 'Conserto de Vazamentos', 'Manutenção Preventiva'], datasets: [{ label: 'Payback (em meses)', data: [10, 3, 6], backgroundColor: [fiegGreen, fiegBlue, fiegGreen] }] }, options: { plugins: { legend: { display: false }, title: { display: true, text: 'Retorno de Investimentos de Baixo Custo' } } } });
+            new Chart(document.getElementById('chartModernizacao').getContext('2d'), { type: 'bar', data: { labels: ['Motor Antigo', 'Motor de Alta Eficiência'], datasets: [{ label: 'Consumo Anual de Energia (em MWh)', data: [100, 65], backgroundColor: ['#cccccc', fiegGreen] }] }, options: { plugins: { legend: { display: false } } } });
+            new Chart(document.getElementById('chartMercado').getContext('2d'), { type: 'line', data: { labels: ['Jan', 'Mar', 'Mai', 'Jul', 'Set'], datasets: [{ label: 'Mercado Cativo (R$/MWh)', data: [350, 380, 400, 390, 410], borderColor: '#cccccc' }, { label: 'Mercado Livre (R$/MWh)', data: [250, 240, 260, 270, 265], borderColor: fiegGreen }] }, options: { plugins: { title: { display: true, text: 'Comparativo de Preço da Energia (2025)' } } } });
+            new Chart(document.getElementById('chartGeracao').getContext('2d'), { type: 'pie', data: { labels: ['Hidrelétrica', 'Eólica', 'Solar', 'Biomassa', 'Outros'], datasets: [{ data: [55, 15, 12, 9, 9], backgroundColor: ['#639fec', '#68d388', '#ffd700', '#b38b6d', '#cccccc'] }] }, options: { plugins: { title: { display: true, text: 'Matriz Elétrica Brasileira (2025)' } } } });
+        });
+    </script>
 </body>
 </html>

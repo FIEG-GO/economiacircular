@@ -12,337 +12,379 @@
     
     <style>
         :root {
-            --cor-primaria-fieg: #003366; /* Azul Escuro */
-            --cor-secundaria-fieg: #009933; /* Verde Vivo */
-            --cor-texto: #212529;
+            --cor-primaria-fieg: #003366;
+            --cor-secundaria-fieg: #009933;
+            --cor-texto: #333;
             --cor-texto-claro: #f8f9fa;
-            --cor-fundo-degrade-claro: #e0ffe0; /* Verde bem claro para o degradê */
-            --cor-fundo-degrade-escuro: #c0f0c0; /* Um pouco mais escuro */
-            --cor-borda-aba: #ddd;
+            --cor-fundo-claro: #f4f7f6;
+            --nav-height: 70px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--nav-height);
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(to bottom right, var(--cor-fundo-degrade-claro), var(--cor-fundo-degrade-escuro)); /* Degradê verde */
+            background-color: #fff;
             color: var(--cor-texto);
-            line-height: 1.7;
-            min-height: 100vh; /* Garante que o degradê cubra toda a altura */
-            display: flex;
-            flex-direction: column;
+            line-height: 1.8;
+            font-size: 16px;
         }
 
         .container {
             max-width: 1100px;
-            margin: 40px auto;
-            padding: 20px;
-            flex-grow: 1; /* Permite que o container ocupe o espaço disponível */
-        }
-        
-        .main-wrapper {
-            background-color: #fff;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            /* Removido border-radius */
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            position: relative;
+        /* --- 1. Menu de Navegação Fixo --- */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
         }
-        .page-header .logo {
-            margin-bottom: 20px;
-        }
-        .page-header .logo img {
-            max-width: 250px; /* Grande destaque */
-            height: auto;
-            display: block; /* Para centralizar com margin auto */
-            margin: 0 auto 20px auto;
-        }
-        .page-header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--cor-primaria-fieg);
-            margin-bottom: 10px;
-        }
-        .page-header p {
-            font-size: 1.2rem;
-            color: #555;
-            max-width: 800px;
-            margin: 0 auto;
+
+        .main-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        #download-btn {
+        .main-nav .logo img {
+            max-height: 40px;
+            display: block;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--cor-primaria-fieg);
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .main-nav a::after {
+            content: '';
             position: absolute;
-            top: 0;
-            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--cor-secundaria-fieg);
+            transition: width 0.3s ease;
+        }
+
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* --- 2. Seção Herói --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 80vh;
+            color: white;
+            background: linear-gradient(rgba(0, 51, 102, 0.7), rgba(0, 51, 102, 0.5)),
+                        url('https://upload.wikimedia.org/wikipedia/commons/2/28/Cerrado_Brasileiro.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 40px 20px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .hero-btn {
             background-color: var(--cor-secundaria-fieg);
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            /* Removido border-radius */
-        }
-        #download-btn:hover { background-color: #007a29; }
-
-        .intro-section {
-            margin-bottom: 40px;
-        }
-        .intro-section h2 {
-            color: var(--cor-primaria-fieg);
+            padding: 15px 35px;
             font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .hero-btn:hover {
+            background-color: #007a29;
+            transform: translateY(-3px);
+        }
+
+        /* --- 3. Layout das Seções de Conteúdo --- */
+        .content-section {
+            padding: 80px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-section:nth-of-type(odd) {
+            background-color: var(--cor-fundo-claro);
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            color: var(--cor-primaria-fieg);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .content-section .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px auto;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .content-section h3 {
+            font-size: 1.5rem;
+            color: var(--cor-secundaria-fieg);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        /* --- 4. Design "Card-Based" --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .card strong {
+            display: block;
+            color: var(--cor-primaria-fieg);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        /* --- 5. Bloco de Destaque (antigo pop-up) --- */
+        .highlight-block {
+            background-color: #e6f4ea;
+            border-left: 5px solid var(--cor-secundaria-fieg);
+            padding: 30px;
+            margin: 50px 0;
+        }
+        
+        .highlight-block h4 {
+            color: var(--cor-primaria-fieg);
+            font-size: 1.3rem;
             margin-bottom: 15px;
         }
-
-        .tabs-nav {
-            display: flex;
-            border-bottom: 3px solid var(--cor-primaria-fieg);
-            margin-bottom: 30px;
-            flex-wrap: wrap; /* Permite quebrar linha em telas menores */
-        }
-        .tab-button {
-            background: none;
-            border: none;
-            padding: 15px 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #aaa;
-            position: relative;
-            transition: color 0.3s;
-            white-space: nowrap; /* Evita quebras de linha no texto do botão */
-        }
-        .tab-button.active {
-            color: var(--cor-primaria-fieg);
-        }
-        .tab-button.active::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--cor-secundaria-fieg);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .tab-content h3 { color: var(--cor-secundaria-fieg); margin-top: 20px; margin-bottom: 10px; }
-        .tab-content ul { padding-left: 20px; list-style-type: disc; }
-        .tab-content ol { padding-left: 20px; list-style-type: decimal; }
-        .tab-content li { margin-bottom: 10px; }
-        .tab-content .highlight { 
-            background-color: #f0f2f5; 
-            padding: 20px; 
-            border-left: 5px solid var(--cor-secundaria-fieg); 
-            margin: 20px 0; 
-            /* Removido border-radius */
-        }
+        
+        .highlight-block ol, .highlight-block ul { padding-left: 20px; }
+        .highlight-block li { margin-bottom: 10px; }
 
         footer {
             background-color: var(--cor-primaria-fieg);
             color: var(--cor-texto-claro);
-            padding: 30px;
-            margin-top: auto; /* Empurra o footer para baixo */
+            padding: 40px 20px;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
-        footer .footer-block {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 5px; /* Espaço entre as linhas */
-        }
-        footer a { color: var(--cor-texto-claro); text-decoration: none; font-weight: 600; }
-        footer a:hover { text-decoration: underline; }
+        
+        footer a { color: #fff; text-decoration: none; font-weight: 600; }
+        footer .footer-block { display: flex; flex-direction: column; gap: 8px; }
 
         @media (max-width: 768px) {
-            .page-header h1 { font-size: 2rem; }
-            #download-btn { position: static; margin-top: 20px; width: 100%; }
-            .tabs-nav { flex-direction: column; }
-            .tab-button { 
-                border-bottom: 1px solid var(--cor-borda-aba); 
-                width: 100%; /* Ocupa largura total */
-            }
-            .tab-button.active::after {
-                height: 1px; /* Linha mais fina em mobile */
-                bottom: -1px;
-            }
-            .container { margin: 20px auto; padding: 10px; }
-            .main-wrapper { padding: 20px; }
+            .main-nav ul { display: none; } /* Simplificação para mobile, pode ser substituído por um menu hamburguer */
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .content-section h2 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="main-wrapper" id="content-to-pdf">
-            <header class="page-header">
-                <div class="logo">
-                    <img src="https://www.fieg.com.br/esqueciminhasenha/img/marcaFIEG_azul.png" alt="Logo FIEG">
+
+    <nav class="main-nav">
+        <div class="container">
+            <a href="http://www.fieg.com.br" target="_blank" rel="noopener noreferrer" class="logo">
+                <img src="https://www.fieg.com.br/esqueciminhasenha/img/marcaFIEG_azul.png" alt="Logo FIEG">
+            </a>
+            <ul>
+                <li><a href="#capitulo1">Capítulo 1</a></li>
+                <li><a href="#capitulo2">Capítulo 2</a></li>
+                <li><a href="#capitulo3">Capítulo 3</a></li>
+                <li><a href="#capitulo4">Capítulo 4</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div id="content-to-pdf">
+        <header class="hero">
+            <h1>Guia de Sustentabilidade para a Indústria</h1>
+            <p>Orientações práticas para pequenas e médias empresas do setor produtivo brasileiro.</p>
+            <button class="hero-btn" id="download-btn">Baixar Guia em PDF</button>
+        </header>
+
+        <main>
+            <section id="introducao" class="content-section">
+                <div class="container">
+                    <h2>Introdução</h2>
+                    <p class="section-subtitle">
+                        Este guia, adaptado pela FIEG para a realidade da indústria brasileira, oferece orientações concretas para PMEs. O objetivo é fornecer insights e um direcionamento claro em áreas cruciais da sustentabilidade, ajudando sua empresa a se preparar para as demandas do futuro, reduzir riscos e identificar novas oportunidades de negócio.
+                    </p>
                 </div>
-                <h1>Guia de Sustentabilidade para a Indústria</h1>
-                <p>Orientações práticas para pequenas e médias empresas do setor produtivo brasileiro.</p>
-                <button id="download-btn">Baixar em PDF</button>
-            </header>
-
-            <section class="intro-section">
-                <h2>Introdução</h2>
-                <p>Este guia, adaptado pela FIEG para a realidade da indústria brasileira, oferece orientações concretas para pequenas e médias empresas (PMEs) do setor de manufatura. O objetivo é fornecer insights e um direcionamento claro em áreas cruciais da sustentabilidade, ajudando sua empresa a se preparar para as demandas do futuro, reduzir riscos e identificar novas oportunidades de negócio. A jornada para a sustentabilidade é um caminho de competitividade e inovação.</p>
             </section>
-
-            <nav class="tabs-nav">
-                <button class="tab-button active" data-tab="tab1">Guia 1: Primeiros Passos</button>
-                <button class="tab-button" data-tab="tab2">Guia 2: Legislação e Riscos</button>
-                <button class="tab-button" data-tab="tab3">Guia 3: Economia Circular</button>
-                <button class="tab-button" data-tab="tab4">Guia 4: Energia e Emissões</button>
-            </nav>
-
-            <main>
-                <div id="tab1" class="tab-content active">
-                    <h2>Guia 1: Dando os Primeiros Passos na Jornada da Sustentabilidade</h2>
-                    <p>Iniciar uma estratégia de sustentabilidade pode parecer complexo, mas pode ser simplificado em passos gerenciáveis. O mais importante é começar.</p>
+            
+            <section id="capitulo1" class="content-section">
+                <div class="container">
+                    <h2>Capítulo 1: Primeiros Passos</h2>
+                    <p class="section-subtitle">Iniciar uma estratégia de sustentabilidade pode parecer complexo, mas pode ser simplificado em passos gerenciáveis. O mais importante é começar.</p>
                     
-                    <h3>Por que a sustentabilidade é importante para sua PME?</h3>
-                    <ul>
-                        <li><strong>Redução de Custos:</strong> Eficiência no uso de energia, água e matérias-primas resulta em economia direta.</li>
-                        <li><strong>Exigência de Clientes:</strong> Grandes empresas estão cada vez mais exigindo que seus fornecedores demonstrem conformidade com práticas ESG (Ambiental, Social e Governança).</li>
-                        <li><strong>Acesso a Financiamento:</strong> Instituições financeiras oferecem melhores condições de crédito para empresas com bom desempenho em sustentabilidade.</li>
-                        <li><strong>Atração de Talentos:</strong> Profissionais qualificados preferem trabalhar em empresas com propósito e responsabilidade socioambiental.</li>
-                        <li><strong>Gestão de Riscos:</strong> Prepara a empresa para futuras regulamentações, escassez de recursos e mudanças climáticas.</li>
-                    </ul>
-
-                    <div class="highlight">
+                    <h3>Por que a sustentabilidade é importante?</h3>
+                    <div class="card-grid">
+                        <div class="card"><strong>Redução de Custos</strong><p>Eficiência no uso de energia, água e matérias-primas resulta em economia direta.</p></div>
+                        <div class="card"><strong>Exigência de Clientes</strong><p>Grandes empresas exigem que seus fornecedores demonstrem conformidade com práticas ESG.</p></div>
+                        <div class="card"><strong>Acesso a Financiamento</strong><p>Instituições financeiras oferecem melhores condições para empresas com bom desempenho em sustentabilidade.</p></div>
+                        <div class="card"><strong>Atração de Talentos</strong><p>Profissionais qualificados preferem trabalhar em empresas com responsabilidade socioambiental.</p></div>
+                        <div class="card"><strong>Gestão de Riscos</strong><p>Prepara a empresa para futuras regulamentações, escassez de recursos e mudanças climáticas.</p></div>
+                    </div>
+                    
+                    <div class="highlight-block">
                         <h4>Como Começar: Um Plano de Ação Simplificado</h4>
                         <ol>
                             <li><strong>Engaje a Liderança:</strong> A alta gestão precisa comprar a ideia e liderar pelo exemplo.</li>
                             <li><strong>Faça um Diagnóstico Simples:</strong> Onde sua empresa mais consome recursos? Onde gera mais resíduos? Quais são os principais riscos?</li>
-                            <li><strong>Defina 1 ou 2 Metas Iniciais:</strong> Não tente resolver tudo de uma vez. Comece com metas claras, como "Reduzir o consumo de energia em 10% em um ano" ou "Reciclar 80% dos resíduos gerados".</li>
-                            <li><strong>Comunique e Envolva a Equipe:</strong> A sustentabilidade é um esforço de todos. Crie uma cultura de responsabilidade.</li>
-                            <li><strong>Meça e Comunique o Progresso:</strong> O que não é medido, não é gerenciado. Mostre os resultados para a equipe, clientes e parceiros.</li>
+                            <li><strong>Defina Metas Iniciais:</strong> Comece com metas claras, como "Reduzir o consumo de energia em 10% em um ano".</li>
+                            <li><strong>Comunique e Envolva a Equipe:</strong> Crie uma cultura de responsabilidade e incentive a participação de todos.</li>
+                            <li><strong>Meça e Comunique o Progresso:</strong> O que não é medido, não é gerenciado. Mostre os resultados para todos.</li>
                         </ol>
                     </div>
                 </div>
-                
-                <div id="tab2" class="tab-content">
-                    <h2>Guia 2: Legislação, Regulamentações e Gestão de Riscos</h2>
-                    <p>O cenário regulatório está mudando rapidamente. Entender as leis aplicáveis não é apenas uma obrigação, mas uma forma de proteger seu negócio.</p>
+            </section>
+            
+            <section id="capitulo2" class="content-section">
+                <div class="container">
+                    <h2>Capítulo 2: Legislação e Riscos</h2>
+                    <p class="section-subtitle">O cenário regulatório está mudando rapidamente. Entender as leis aplicáveis não é apenas uma obrigação, mas uma forma de proteger seu negócio.</p>
                     
-                    <h3>Principais Áreas de Atenção no Brasil:</h3>
-                    <ul>
-                        <li><strong>Legislação Ambiental:</strong> Fique atento às leis sobre licenciamento ambiental, gestão de resíduos sólidos (PNRS), emissões atmosféricas e tratamento de efluentes. As multas por não conformidade podem ser severas.</li>
-                        <li><strong>Saúde e Segurança do Trabalho:</strong> Normas Regulamentadoras (NRs) são mandatórias e visam garantir um ambiente de trabalho seguro, reduzindo acidentes e passivos trabalhistas.</li>
-                        <li><strong>Due Diligence da Cadeia de Suprimentos:</strong> Leis globais (e cada vez mais, nacionais) exigem que empresas verifiquem se seus fornecedores não estão envolvidos com trabalho análogo à escravidão ou desmatamento ilegal.</li>
-                        <li><strong>Relatórios de Sustentabilidade:</strong> Embora ainda não obrigatório para todas as PMEs, a demanda por transparência está crescendo. Grandes clientes podem exigir relatórios sobre suas emissões, consumo de água e práticas sociais.</li>
-                    </ul>
-                    
-                    <div class="highlight">
+                    <h3>Principais Áreas de Atenção no Brasil</h3>
+                    <div class="card-grid">
+                        <div class="card"><strong>Legislação Ambiental</strong><p>Fique atento às leis sobre licenciamento ambiental, gestão de resíduos sólidos (PNRS), emissões atmosféricas e tratamento de efluentes.</p></div>
+                        <div class="card"><strong>Saúde e Segurança</strong><p>As Normas Regulamentadoras (NRs) são mandatórias e visam garantir um ambiente de trabalho seguro, reduzindo acidentes.</p></div>
+                        <div class="card"><strong>Cadeia de Suprimentos</strong><p>Leis globais exigem que empresas verifiquem se seus fornecedores não estão envolvidos com trabalho análogo à escravidão ou desmatamento ilegal.</p></div>
+                        <div class="card"><strong>Relatórios de Sustentabilidade</strong><p>Embora ainda não obrigatório para todas as PMEs, a demanda por transparência está crescendo e pode ser exigida por grandes clientes.</p></div>
+                    </div>
+
+                    <div class="highlight-block">
                         <h4>Gestão de Risco Proativa</h4>
                         <p><strong>Não espere pela fiscalização.</strong> Mapear os riscos legais e regulatórios é um investimento na longevidade da sua empresa. Um bom primeiro passo é realizar uma auditoria interna para identificar pontos de não conformidade e criar um plano para corrigi-los.</p>
                     </div>
                 </div>
+            </section>
 
-                <div id="tab3" class="tab-content">
-                    <h2>Guia 3: Economia Circular na Prática Industrial</h2>
-                    <p>A Economia Circular propõe um novo modelo de produção e consumo, onde o "fim da vida" de um produto é o começo de um novo ciclo. Em vez do modelo linear "extrair-produzir-descartar", o objetivo é manter os recursos em uso pelo maior tempo possível.</p>
-
+            <section id="capitulo3" class="content-section">
+                <div class="container">
+                    <h2>Capítulo 3: Economia Circular</h2>
+                    <p class="section-subtitle">A Economia Circular propõe um novo modelo onde o "fim da vida" de um produto é o começo de um novo ciclo, mantendo os recursos em uso pelo maior tempo possível.</p>
+                    
                     <h3>O que isso significa para sua indústria?</h3>
-                    <ul>
-                        <li><strong>Design para a Durabilidade:</strong> Projetar produtos que sejam fáceis de reparar, desmontar e reciclar.</li>
-                        <li><strong>Reaproveitamento de Resíduos:</strong> O resíduo de um processo pode ser a matéria-prima de outro. Mapeie seus resíduos e explore parcerias para vendê-los ou trocá-los.</li>
-                        <li><strong>Novos Modelos de Negócio:</strong> Em vez de vender um produto, que tal vender um serviço? (Ex: "iluminação como serviço" em vez de vender lâmpadas).</li>
-                        <li><strong>Logística Reversa:</strong> Criar sistemas para coletar produtos usados de seus clientes para remanufatura ou reciclagem.</li>
-                    </ul>
-
-                    <div class="highlight">
+                     <div class="card-grid">
+                        <div class="card"><strong>Design para Durabilidade</strong><p>Projetar produtos que sejam fáceis de reparar, desmontar e reciclar desde o início.</p></div>
+                        <div class="card"><strong>Reaproveitamento de Resíduos</strong><p>O resíduo de um processo pode ser a matéria-prima de outro. Mapeie seus resíduos e explore parcerias.</p></div>
+                        <div class="card"><strong>Novos Modelos de Negócio</strong><p>Em vez de vender um produto, que tal vender um serviço? (Ex: "iluminação como serviço" em vez de lâmpadas).</p></div>
+                        <div class="card"><strong>Logística Reversa</strong><p>Criar sistemas para coletar produtos usados de seus clientes para remanufatura ou reciclagem.</p></div>
+                    </div>
+                    
+                    <div class="highlight-block">
                         <h4>Exemplo Prático</h4>
                         <p>Uma indústria de confecção que utiliza os retalhos de tecido (que seriam descartados) para produzir uma nova linha de produtos, como estofamento para a indústria de móveis. Isso reduz o custo com descarte, gera uma nova fonte de receita e fortalece a imagem da marca.</p>
                     </div>
                 </div>
+            </section>
 
-                <div id="tab4" class="tab-content">
-                    <h2>Guia 4: Eficiência Energética e Redução de Emissões</h2>
-                    <p>O consumo de energia é um dos maiores custos para a indústria e uma das principais fontes de emissões de gases de efeito estufa (GEE). A gestão eficiente da energia é, portanto, uma das ações de sustentabilidade com o retorno financeiro mais rápido e evidente.</p>
-
-                    <h3>Oportunidades de Baixo Custo:</h3>
+            <section id="capitulo4" class="content-section">
+                <div class="container">
+                    <h2>Capítulo 4: Energia e Emissões</h2>
+                    <p class="section-subtitle">O consumo de energia é um dos maiores custos e fontes de emissões. A gestão eficiente da energia é uma das ações com o retorno financeiro mais rápido e evidente.</p>
+                    
+                    <h3>Oportunidades de Baixo Custo</h3>
                     <ul>
-                        <li><strong>Mapeamento do Consumo:</strong> Instale medidores em áreas-chave da fábrica para entender onde a energia está sendo gasta.</li>
-                        <li><strong>Manutenção Preventiva:</strong> Motores, compressores e sistemas de iluminação mal mantidos consomem muito mais energia.</li>
+                        <li><strong>Mapeamento do Consumo:</strong> Instale medidores em áreas-chave para entender onde a energia está sendo gasta.</li>
+                        <li><strong>Manutenção Preventiva:</strong> Motores, compressores e sistemas mal mantidos consomem muito mais energia.</li>
                         <li><strong>Gestão da Iluminação:</strong> Substitua lâmpadas antigas por LED e instale sensores de presença.</li>
-                        <li><strong>Combate a Vazamentos:</strong> Vazamentos em sistemas de ar comprimido são uma fonte comum de desperdício de energia.</li>
+                        <li><strong>Combate a Vazamentos:</strong> Vazamentos em sistemas de ar comprimido são uma fonte comum de desperdício.</li>
                     </ul>
                     
-                    <h3>Investimentos Estratégicos:</h3>
+                    <h3>Investimentos Estratégicos</h3>
                     <ul>
-                        <li><strong>Modernização de Motores:</strong> Trocar motores antigos por modelos de alta eficiência pode gerar uma economia de energia de até 40%.</li>
-                        <li><strong>Migração para o Mercado Livre de Energia:</strong> Empresas com demanda a partir de 500 kW podem negociar contratos de energia diretamente com geradores, reduzindo custos.</li>
-                        <li><strong>Geração Própria:</strong> A instalação de painéis solares no telhado da fábrica pode reduzir drasticamente a conta de luz e o investimento se paga em poucos anos.</li>
+                        <li><strong>Modernização de Motores:</strong> Trocar motores antigos por modelos de alta eficiência pode gerar uma economia de até 40%.</li>
+                        <li><strong>Migração para o Mercado Livre de Energia:</strong> Empresas com demanda a partir de 500 kW podem negociar contratos diretamente com geradores.</li>
+                        <li><strong>Geração Própria:</strong> A instalação de painéis solares pode reduzir drasticamente a conta de luz e o investimento se paga em poucos anos.</li>
                     </ul>
                 </div>
-            </main>
-        </div>
-        
-        <footer>
-            <div class="footer-block">
-                <span>Publicação da Federação das Indústrias de Goiás - FIEG</span>
-                <span>Superintendência: Lenner Rocha | Gerência de Desenvolvimento Industrial: Adriano Marquez</span>
-                <span>Informações (62) 3219-1755 | superintendencia@fieg.com.br</span>
-                <span>Av. Araguaia, nº 1.544 - Edifício Albano Franco CEP 74645-070 Goiânia, GO</span>
-                <span><a href="https://www.fieg.com.br" target="_blank">www.fieg.com.br</a></span>
-                <span>Autorizada a reprodução desde que citada a fonte</span>
-            </div>
-        </footer>
+            </section>
+        </main>
     </div>
+    
+    <footer>
+        <div class="container footer-block">
+            <span>Publicação da Federação das Indústrias de Goiás - FIEG</span>
+            <span>Superintendência: Lenner Rocha | Gerência de Desenvolvimento Industrial: Adriano Marquez</span>
+            <span>Informações: (62) 3219-1755 | superintendencia@fieg.com.br</span>
+            <span>Av. Araguaia, nº 1.544 - Edifício Albano Franco CEP 74645-070 Goiânia, GO</span>
+            <a href="https://www.fieg.com.br" target="_blank">www.fieg.com.br</a>
+            <span>Autorizada a reprodução desde que citada a fonte.</span>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Desativa todos
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-
-                    // Ativa o clicado
-                    button.classList.add('active');
-                    document.getElementById(button.dataset.tab).classList.add('active');
-                });
-            });
-
             const downloadBtn = document.getElementById('download-btn');
             downloadBtn.addEventListener('click', () => {
-                // Temporariamente torna todas as abas visíveis para o html2pdf
-                tabContents.forEach(content => {
-                    content.style.display = 'block';
-                });
-
                 const element = document.getElementById('content-to-pdf');
                 const opt = {
-                    margin:       1,
+                    margin:       0.5,
                     filename:     'guia_sustentabilidade_fieg.pdf',
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2, useCORS: true },
                     jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
                 };
-
-                html2pdf().set(opt).from(element).save().then(() => {
-                    // Após a geração do PDF, restaura a visibilidade das abas
-                    tabContents.forEach(content => {
-                        if (!content.classList.contains('active')) {
-                            content.style.display = 'none';
-                        }
-                    });
-                });
+                html2pdf().set(opt).from(element).save();
             });
         });
     </script>
